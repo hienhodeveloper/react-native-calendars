@@ -391,7 +391,9 @@ class Calendar extends Component {
       disableArrowLeft: this.props.disableArrowLeft,
       disableArrowRight: this.props.disableArrowRight,
       disabledDaysIndexes: this.props.disabledDaysIndexes,
-      renderHeader: this.props.renderHeader
+      renderHeader: this.props.renderHeader,
+      maxDate: this.props.maxDate,
+      minDate: this.props.minDate,
     };
     const CustomHeader = this.props.customHeader;
     return (
