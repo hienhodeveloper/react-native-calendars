@@ -4,10 +4,10 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import XDate from 'xdate';
 import PropTypes from 'prop-types';
 import styleConstructor from './style';
-import {weekDayNames} from '../../dateutils';
+import dateutils, {weekDayNames} from '../../dateutils';
 import {CHANGE_MONTH_LEFT_ARROW, CHANGE_MONTH_RIGHT_ARROW, HEADER_MONTH_NAME} from '../../testIDs';
 import _ from 'lodash';
-
+import {parseDate} from '../../interface';
 
 class CalendarHeader extends Component {
   static displayName = 'IGNORE';
@@ -28,7 +28,9 @@ class CalendarHeader extends Component {
     disableArrowRight: PropTypes.bool,
     webAriaLevel: PropTypes.number,
     disabledDaysIndexes: PropTypes.arrayOf(PropTypes.number),
-    renderHeader: PropTypes.any
+    renderHeader: PropTypes.any,
+    maxDate: PropTypes.string,
+    minDate: PropTypes.string,
   };
 
   static defaultProps = {
@@ -81,9 +83,31 @@ class CalendarHeader extends Component {
     }
     return false;
   }
+  isAllowPress(min, max) {
+    let monthDate = parseDate(this.props.month)
+    if (!monthDate) {
+      return
+    }
+    if (min && !max) {
+      monthDate.addMonths(-1)
+      const minDate = parseDate(this.props.minDate);
+      const isAllowMin = !(minDate && !dateutils.isGTE(monthDate, minDate))
+      return isAllowMin
+    }
+    if (max && !min) {
+      monthDate.addMonths(1)
+      const maxDate = parseDate(this.props.maxDate);
+      const isAllowMax = !(maxDate && !dateutils.isLTE(monthDate, maxDate))
+      return isAllowMax
+    }
+    return true;
+  }
 
   onPressLeft = () => {
     const {onPressArrowLeft, month} = this.props;
+    let isAllow = this.isAllowPress(true, false)
+    console.log('CalendarHeader -> onPressLeft -> isAllow', isAllow);
+    if (!isAllow) { return null; }
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.subtractMonth, month);
     }
@@ -92,6 +116,8 @@ class CalendarHeader extends Component {
 
   onPressRight = () => {
     const {onPressArrowRight, month} = this.props;
+    let isAllow = this.isAllowPress(false, true)
+    if (!isAllow) { return null; }
     if (typeof onPressArrowRight === 'function') {
       return onPressArrowRight(this.addMonth, month);
     }
