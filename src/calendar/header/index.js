@@ -106,7 +106,6 @@ class CalendarHeader extends Component {
   onPressLeft = () => {
     const {onPressArrowLeft, month} = this.props;
     let isAllow = this.isAllowPress(true, false)
-    console.log('CalendarHeader -> onPressLeft -> isAllow', isAllow);
     if (!isAllow) { return null; }
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.subtractMonth, month);
