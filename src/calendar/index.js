@@ -355,13 +355,16 @@ class Calendar extends Component {
     }
 
     let indicator;
-    const current = parseDate(this.props.current);
-    if (current) {
-      const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
-      if (this.props.displayLoadingIndicator &&
-        !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
-        indicator = true;
-      }
+    // const current = parseDate(this.props.current);
+    // if (current) {
+    //   const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
+    //   if (this.props.displayLoadingIndicator &&
+    //     !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
+    //     indicator = true;
+    //   }
+    // }
+    if (this.props.displayLoadingIndicator) {
+      indicator = true;
     }
 
     const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
